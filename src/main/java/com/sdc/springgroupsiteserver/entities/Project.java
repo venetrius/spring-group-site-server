@@ -1,4 +1,4 @@
-package com.sdc.springgroupsiteserver;
+package com.sdc.springgroupsiteserver.entities;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

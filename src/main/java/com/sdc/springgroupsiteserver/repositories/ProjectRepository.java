@@ -1,6 +1,7 @@
-package com.sdc.springgroupsiteserver;
+package com.sdc.springgroupsiteserver.repositories;
 
 
+import com.sdc.springgroupsiteserver.entities.Project;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
