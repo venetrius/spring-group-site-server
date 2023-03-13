@@ -1,6 +1,8 @@
 package com.sdc.springgroupsiteserver;
 
+import com.sdc.springgroupsiteserver.entities.Comment;
 import com.sdc.springgroupsiteserver.entities.Project;
+import com.sdc.springgroupsiteserver.repositories.CommentRepository;
 import com.sdc.springgroupsiteserver.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +22,10 @@ public class SpringGroupSiteServerApplication {
 
     @Autowired
     private ProjectRepository repo;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(SpringGroupSiteServerApplication.class, args);
     }
@@ -37,5 +43,16 @@ public class SpringGroupSiteServerApplication {
     @GetMapping("/projects/{id}")
     public Optional<Project> getProject(@PathVariable Integer id){
         return repo.findById(id);
+    }
+
+
+    @GetMapping("/projects/{id}/comments")
+    public List<Comment> getProjectComments(){
+        return commentRepository.findAll();
+    }
+
+    @PostMapping("/projects/{id}/comments")
+    public Comment postProjectComment(@RequestBody Comment newComment) {
+        return commentRepository.save(newComment);
     }
 }

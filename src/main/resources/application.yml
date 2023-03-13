@@ -1,9 +1,10 @@
 # TODO use JCE
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: "jdbc:postgresql://localhost/sdc-yyc-spring"
+
+    username: 'postgres'
+    password: 'postgres'
 spring.jpa:
   generate-ddl: true
 
