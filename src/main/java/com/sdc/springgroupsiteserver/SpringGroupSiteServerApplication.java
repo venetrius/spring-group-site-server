@@ -2,12 +2,15 @@ package com.sdc.springgroupsiteserver;
 
 import com.sdc.springgroupsiteserver.entities.Comment;
 import com.sdc.springgroupsiteserver.entities.Project;
+import com.sdc.springgroupsiteserver.entities.User;
 import com.sdc.springgroupsiteserver.repositories.CommentRepository;
 import com.sdc.springgroupsiteserver.repositories.ProjectRepository;
+import com.sdc.springgroupsiteserver.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,6 +23,9 @@ public class SpringGroupSiteServerApplication {
 
     @Autowired
     private ProjectRepository repo;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -35,6 +41,8 @@ public class SpringGroupSiteServerApplication {
 
     @PostMapping("/projects")
     public Project postProject(@RequestBody Project newProject) {
+        User currrentUser = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+        newProject.setAdmin(currrentUser);
         return repo.save(newProject);
     }
     
