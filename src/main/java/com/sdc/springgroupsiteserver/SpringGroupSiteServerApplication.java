@@ -1,5 +1,6 @@
 package com.sdc.springgroupsiteserver;
 
+import com.sdc.springgroupsiteserver.dto.ProjectDto;
 import com.sdc.springgroupsiteserver.entities.Comment;
 import com.sdc.springgroupsiteserver.entities.Project;
 import com.sdc.springgroupsiteserver.entities.User;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @RestController
@@ -35,20 +37,27 @@ public class SpringGroupSiteServerApplication {
     }
 
     @GetMapping("/projects")
-    public List<Project> getProjects(){
-        return repo.findAll();
+    public List<ProjectDto> getProjects(){
+        return repo.findAll()
+                .stream()
+                .map(project ->new ProjectDto(project))
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/projects")
-    public Project postProject(@RequestBody Project newProject) {
+    public ProjectDto postProject(@RequestBody Project newProject) {
         User currrentUser = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
         newProject.setAdmin(currrentUser);
-        return repo.save(newProject);
+        return new ProjectDto(repo.save(newProject));
     }
     
     @GetMapping("/projects/{id}")
-    public Optional<Project> getProject(@PathVariable Integer id){
-        return repo.findById(id);
+    public ProjectDto getProject(@PathVariable Integer id){
+        Project project = repo.findById(id).get();
+        if(project == null) {
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Project Not Found");
+        }
+        return new ProjectDto(project);
     }
 
 

@@ -2,6 +2,7 @@ package com.sdc.springgroupsiteserver.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,7 +21,13 @@ public class Project {
     @Setter(AccessLevel.NONE)
     private int id;
 
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name="admin_id")
     private User admin;
+
+    @Column(name="admin_id", insertable = false, updatable = false)
+    private int adminId;
+
     private String name;
     private String description;
     private String summary;
