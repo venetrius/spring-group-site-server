@@ -22,8 +22,8 @@ public class Event {
     private String name;
     private String description;
     private String location;
-    private Timestamp start;
-    private  Timestamp end;
+    private Timestamp startDate;
+    private  Timestamp endDate;
 
     @Column
     @UpdateTimestamp
