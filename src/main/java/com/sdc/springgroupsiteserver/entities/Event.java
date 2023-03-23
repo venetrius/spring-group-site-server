@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -24,6 +25,9 @@ public class Event {
     private String location;
     private Timestamp startDate;
     private  Timestamp endDate;
+
+    @ManyToMany
+    private Set<User> attendees;
 
     @Column
     @UpdateTimestamp

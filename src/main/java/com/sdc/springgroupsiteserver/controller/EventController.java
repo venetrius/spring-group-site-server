@@ -2,11 +2,12 @@ package com.sdc.springgroupsiteserver.controller;
 
 import com.sdc.springgroupsiteserver.dto.EventDto;
 import com.sdc.springgroupsiteserver.entities.Event;
+import com.sdc.springgroupsiteserver.repositories.EventRepository;
 import com.sdc.springgroupsiteserver.service.interfaces.EventService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EventController {
     private final EventService eventService;
+
+    private final EventRepository eventRepository;
 
     @PostMapping
     public EventDto postEvent(@RequestBody Event event) {
@@ -34,9 +37,12 @@ public class EventController {
     @GetMapping("/{id}")
     public EventDto getEvent(@PathVariable Integer id){
         Event event = eventService.getEvent(id);
-        if(event == null) {
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Event Not Found");
-        }
         return new EventDto(event);
+    }
+
+    @PostMapping("/{id}/register")
+    public ResponseEntity registerToEvent(@PathVariable Integer id) {
+        eventService.registerAttendee(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 }
