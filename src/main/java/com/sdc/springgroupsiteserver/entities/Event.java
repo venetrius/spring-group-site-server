@@ -26,7 +26,7 @@ public class Event {
     private Timestamp startDate;
     private  Timestamp endDate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> attendees;
 
     @Column

@@ -1,7 +1,9 @@
 package com.sdc.springgroupsiteserver.controller;
 
 import com.sdc.springgroupsiteserver.dto.EventDto;
+import com.sdc.springgroupsiteserver.dto.UserDTO;
 import com.sdc.springgroupsiteserver.entities.Event;
+import com.sdc.springgroupsiteserver.entities.User;
 import com.sdc.springgroupsiteserver.repositories.EventRepository;
 import com.sdc.springgroupsiteserver.service.interfaces.EventService;
 import lombok.AllArgsConstructor;
@@ -9,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,5 +48,14 @@ public class EventController {
     public ResponseEntity registerToEvent(@PathVariable Integer id) {
         eventService.registerAttendee(id);
         return ResponseEntity.status(HttpStatus.CREATED).body("");
+    }
+
+    @GetMapping("/{id}/attendees")
+    public List<UserDTO> getAttendees(@PathVariable Integer id){
+        Event event = eventService.getEvent(id);
+        return event.getAttendees()
+                .stream()
+                .map(attendee ->new UserDTO(attendee))
+                .collect(Collectors.toList());
     }
 }
