@@ -60,9 +60,18 @@ public class EventController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/{eventId}/registerProject/{projectId}")
+    @PostMapping("/{eventId}/projects/{projectId}")
     public ResponseEntity registerProject(@PathVariable Integer eventId, @PathVariable Integer projectId) {
         eventService.registerProject(eventId, projectId);
         return ResponseEntity.status(HttpStatus.CREATED).body("");
+    }
+
+    @GetMapping("/{id}/projects")
+    public List<ProjectDto> getProjectsForEvent(@PathVariable Integer id){
+        Event event = eventService.getEvent(id);
+        return event.getProjects()
+                .stream()
+                .map(project ->new ProjectDto(project))
+                .collect(Collectors.toList());
     }
 }
