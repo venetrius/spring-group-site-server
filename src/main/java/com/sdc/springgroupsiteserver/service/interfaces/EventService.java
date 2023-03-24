@@ -14,4 +14,6 @@ public interface EventService {
     public List<Event> listEvents();
 
     public boolean registerAttendee(int id);
+
+    public boolean registerProject(int eventId, int projectId);
 }

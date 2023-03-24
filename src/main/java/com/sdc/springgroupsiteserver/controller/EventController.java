@@ -1,6 +1,7 @@
 package com.sdc.springgroupsiteserver.controller;
 
 import com.sdc.springgroupsiteserver.dto.EventDto;
+import com.sdc.springgroupsiteserver.dto.ProjectDto;
 import com.sdc.springgroupsiteserver.dto.UserDTO;
 import com.sdc.springgroupsiteserver.entities.Event;
 import com.sdc.springgroupsiteserver.entities.User;
@@ -57,5 +58,11 @@ public class EventController {
                 .stream()
                 .map(attendee ->new UserDTO(attendee))
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/{eventId}/registerProject/{projectId}")
+    public ResponseEntity registerProject(@PathVariable Integer eventId, @PathVariable Integer projectId) {
+        eventService.registerProject(eventId, projectId);
+        return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 }

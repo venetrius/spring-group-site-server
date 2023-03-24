@@ -29,6 +29,9 @@ public class Event {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> attendees;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Project> projects;
+
     @Column
     @UpdateTimestamp
     private Timestamp updatedAt;

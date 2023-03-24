@@ -1,8 +1,10 @@
 package com.sdc.springgroupsiteserver.service.impl;
 
 import com.sdc.springgroupsiteserver.entities.Event;
+import com.sdc.springgroupsiteserver.entities.Project;
 import com.sdc.springgroupsiteserver.entities.User;
 import com.sdc.springgroupsiteserver.repositories.EventRepository;
+import com.sdc.springgroupsiteserver.repositories.ProjectRepository;
 import com.sdc.springgroupsiteserver.repositories.UserRepository;
 import com.sdc.springgroupsiteserver.service.interfaces.EventService;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private final ProjectRepository projectRepository;
 
     @Override
     public Event createEvent(Event event) {
@@ -59,6 +64,23 @@ public class EventServiceImpl implements EventService {
 
         if(!event.getAttendees().contains(currrentUser)) {
             event.getAttendees().add(currrentUser);
+            eventRepository.save(event);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean registerProject(int eventId, int projectId) {
+        Event event = getEvent(eventId);
+        if(event.getEndDate().before(new Date())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can only sign up for future events");
+        }
+        Project project = projectRepository.findById(projectId);
+        if(project == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project Not Found");
+        }
+        if(!event.getProjects().contains(project)) {
+            event.getProjects().add(project);
             eventRepository.save(event);
         }
         return true;
